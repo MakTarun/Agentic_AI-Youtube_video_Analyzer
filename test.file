@@ -1,0 +1,49 @@
+from transcript_tool import get_transcript
+from summary_tool import summarize_transcript
+from pdf_tool import save_text_as_pdf  # Your PDF conversion function
+from deep_translator import GoogleTranslator
+
+while True:
+    url = input("\nEnter YouTube URL (or type 'exit' to quit): ")
+    if url.lower() == 'exit':
+        print("Exiting...")
+        break
+
+    # Step 1: Fetch transcript (internally converts Hindi to English)
+    transcript = get_transcript(url)
+    if transcript is None:
+        print("❌ Transcript not available for this video.")
+        continue
+
+    # Step 2: Ask user what they want
+    print("\nWhat do you want?")
+    print("1. Transcript")
+    print("2. Summary")
+    choice = input("Enter choice (1/2): ")
+
+    if choice == '1':
+        print("\nTRANSCRIPT (English):\n")
+        print(transcript)
+
+        # Option to download
+        download = input("\nDo you want to save the transcript as PDF? (y/n): ")
+        if download.lower() == 'y':
+            filename = input("Enter PDF filename (without extension): ")
+            save_text_as_pdf(transcript, f"{filename}.pdf")
+            print(f"✅ Transcript saved as {filename}.pdf")
+
+    elif choice == '2':
+        print("\nGenerating English summary...")
+        summary_en = summarize_transcript(transcript)
+        print("\nSUMMARY (English):\n")
+        print(summary_en)
+
+        # Option to download
+        download = input("\nDo you want to save the summary as PDF? (y/n): ")
+        if download.lower() == 'y':
+            filename = input("Enter PDF filename (without extension): ")
+            save_text_as_pdf(summary_en, f"{filename}.pdf")
+            print(f"✅ Summary saved as {filename}.pdf")
+
+    else:
+        print("Invalid choice. Please select 1 or 2.")
