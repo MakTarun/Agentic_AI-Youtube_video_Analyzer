@@ -1,0 +1,87 @@
+import streamlit as st
+from transcript_tool import get_transcript
+from summary_tool import summarize_transcript
+from fpdf import FPDF
+import altair as alt
+import pandas as pd
+import re
+from pathlib import Path
+import os
+
+# --- Helper Functions ---
+def extract_financial_data(text):
+    pattern = r'(\$\d+(?:\.\d+)?[MK]?)|(₹\d+(?:\.\d+)?\s*(?:crore|lakh)?)|(\d+%?)'
+    matches = re.findall(pattern, text)
+    data = []
+    for m in matches:
+        val = next(filter(None, m))
+        num = None
+        if '₹' in val.lower():
+            val_num = re.sub(r'[₹\s,crore|lakh]', '', val.lower())
+            num = float(val_num) * 1e7 if 'crore' in val.lower() else float(val_num) * 1e5
+        elif '$' in val:
+            val_num = re.sub(r'[\$MK]', '', val)
+            num = float(val_num) * 1e6 if 'M' in val else float(val_num) * 1e3 if 'K' in val else float(val_num)
+        elif '%' in val:
+            num = float(val.replace('%', ''))
+        else:
+            num = float(val)
+        data.append({'label': val, 'value': num})
+    return data
+
+def save_summary_pdf(summary_text, filename="video_summary"):
+    """
+    Save summary text to a PDF in the user's Downloads folder.
+    """
+    downloads_path = Path.home() / "Downloads"
+    file_path = downloads_path / f"{filename}.pdf"
+
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Arial", size=12)
+    for line in summary_text.split("\n"):
+        pdf.multi_cell(0, 8, line)
+
+    pdf.output(str(file_path))
+    return str(file_path)
+
+# --- Streamlit UI ---
+st.title("YouTube Video Summary")
+
+url = st.text_input("Enter YouTube URL:")
+
+if url:
+    # Fetch transcript
+    transcript = get_transcript(url)
+    
+    if transcript:
+        # Generate English summary
+        summary_en = summarize_transcript(transcript)
+        
+        st.subheader("Summary (English)")
+        st.text_area("Summary:", summary_en, height=300)
+
+        # Financial Impact Graph
+        st.subheader("Financial Impact Analysis")
+        financial_data = extract_financial_data(transcript)
+        if financial_data:
+            df = pd.DataFrame(financial_data)  # Convert to DataFrame
+            chart = alt.Chart(df).mark_bar().encode(
+                x='label:N',   # Nominal (categorical) field
+                y='value:Q',   # Quantitative (numeric) field
+                tooltip=['label', 'value']
+            ).properties(title="Financial Impact")
+            st.altair_chart(chart, use_container_width=True)
+        else:
+            st.info("No financial data detected in video.")
+
+        # PDF download
+        st.subheader("Download Options")
+        filename = st.text_input("Enter PDF filename:", "video_summary")
+        if st.button("Download Summary as PDF"):
+            pdf_file = save_summary_pdf(summary_en, filename)
+            st.success(f"✅ PDF saved as '{pdf_file}'")
+            
+    else:
+        st.error("❌ Transcript not available for this video.")
+      
