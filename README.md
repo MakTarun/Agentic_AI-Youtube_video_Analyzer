@@ -26,8 +26,10 @@ Groq AI
  git clone https://github.com/yourusername/youtube-video-analyzer.git
 cd youtube-video-analyzer
 pip install -r requirements.txt
-
-
 youtube-transcript-api for fetching transcripts
-
 dotenv for securely managing API keys
+
+RESULTS
+<img width="1334" height="697" alt="Screenshot 2026-03-17 183217" src="https://github.com/user-attachments/assets/df01608d-0104-424f-af4e-71bb0812e639" />
+<img width="1248" height="492" alt="Screenshot 2026-03-17 183239" src="https://github.com/user-attachments/assets/107341f9-23e7-4625-8b46-42526b29dafb" />
+
