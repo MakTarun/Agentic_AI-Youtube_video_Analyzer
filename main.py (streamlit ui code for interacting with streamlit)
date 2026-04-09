@@ -1,87 +1,231 @@
 import streamlit as st
+import textwrap
 from transcript_tool import get_transcript
-from summary_tool import summarize_transcript
+from summary_tool import (
+    summary,
+    finance_summary,
+    tech_summary,
+    sports_summary,
+    gaming_summary,
+    questions_summary,
+    
+)
 from fpdf import FPDF
-import altair as alt
-import pandas as pd
 import re
-from pathlib import Path
-import os
+import pandas as pd
+import matplotlib.pyplot as plt
+def clean_text(text):
+    return text.encode("latin-1", "ignore").decode("latin-1")
 
-# --- Helper Functions ---
-def extract_financial_data(text):
-    pattern = r'(\$\d+(?:\.\d+)?[MK]?)|(₹\d+(?:\.\d+)?\s*(?:crore|lakh)?)|(\d+%?)'
-    matches = re.findall(pattern, text)
-    data = []
-    for m in matches:
-        val = next(filter(None, m))
-        num = None
-        if '₹' in val.lower():
-            val_num = re.sub(r'[₹\s,crore|lakh]', '', val.lower())
-            num = float(val_num) * 1e7 if 'crore' in val.lower() else float(val_num) * 1e5
-        elif '$' in val:
-            val_num = re.sub(r'[\$MK]', '', val)
-            num = float(val_num) * 1e6 if 'M' in val else float(val_num) * 1e3 if 'K' in val else float(val_num)
-        elif '%' in val:
-            num = float(val.replace('%', ''))
-        else:
-            num = float(val)
-        data.append({'label': val, 'value': num})
-    return data
+def safe_text(text, width=90):
+    return "\n".join(textwrap.wrap(text, width))
 
-def save_summary_pdf(summary_text, filename="video_summary"):
-    """
-    Save summary text to a PDF in the user's Downloads folder.
-    """
-    downloads_path = Path.home() / "Downloads"
-    file_path = downloads_path / f"{filename}.pdf"
+from fpdf import FPDF
 
+def generate_pdf(text):
     pdf = FPDF()
     pdf.add_page()
-    pdf.set_font("Arial", size=12)
-    for line in summary_text.split("\n"):
-        pdf.multi_cell(0, 8, line)
 
-    pdf.output(str(file_path))
-    return str(file_path)
+    # ✅ Add Unicode font
+    pdf.add_font("Custom", "", "fonts/NotoSans-Regular.ttf", uni=True)
+    pdf.set_font("Custom", size=12)
 
-# --- Streamlit UI ---
-st.title("YouTube Video Summary")
+    for line in text.split("\n"):
+        pdf.multi_cell(190, 8, line)
+
+    return pdf.output(dest="S")
+
+# --- Parse bullet points ---
+def parse_bullets(text):
+    lines = [l.strip("-•* ").strip() for l in text.split("\n") if l.strip()]
+    return [l for l in lines if l]
+
+# --- Improved Financial Data Parser ---
+def parse_financial_data(text):
+    data = {"Metric": [], "Value": []}
+
+    patterns = [
+        r"(Revenue|Profit|Loss|Growth|Sales|Margin|EPS|ROI|EBITDA|Income|Expense)[^\d₹$]*[₹$]?\s*(\d+[\.,]?\d*)\s*(%|M|B|K|crore|lakh|million|billion)?",
+    ]
+
+    multiplier_map = {
+        "k": 1e3,
+        "m": 1e6,
+        "b": 1e9,
+        "million": 1e6,
+        "billion": 1e9,
+        "crore": 1e7,
+        "lakh": 1e5,
+        "%": 1
+    }
+
+    for pattern in patterns:
+        matches = re.findall(pattern, text, re.IGNORECASE)
+        for match in matches:
+            metric = match[0].capitalize()
+            value = float(match[1].replace(",", ""))
+            unit = match[2].lower() if match[2] else ""
+
+            if unit in multiplier_map:
+                value *= multiplier_map[unit]
+
+            data["Metric"].append(metric)
+            data["Value"].append(value)
+
+    return pd.DataFrame(data) if data["Metric"] else None
+
+# --- Parse questions ---
+def parse_questions(text):
+    lines = text.split("\n")
+    questions = [
+        l.strip("-•*123456789. ").strip()
+        for l in lines
+        if "?" in l or l.strip().startswith(tuple("123456789"))
+    ]
+    return [q for q in questions if q]
+
+# --- UI ---
+st.set_page_config(page_title="YouTube Summarizer", page_icon="🎬", layout="wide")
+st.title("🎬 YouTube Video Summarizer")
 
 url = st.text_input("Enter YouTube URL:")
 
-if url:
-    # Fetch transcript
-    transcript = get_transcript(url)
-    
+col1, col2 = st.columns(2)
+with col1:
+    domain = st.radio("Choose Domain", [
+        "General Knowledge", "Finance", "Sports", "Gaming", "Tech", "Questions"
+    ])
+with col2:
+    mode = st.radio("Output Type", ["Summary", "Description"])
+
+start = st.button("Analyze", use_container_width=True)
+
+if "summary_text" not in st.session_state:
+    st.session_state.summary_text = None
+if "domain" not in st.session_state:
+    st.session_state.domain = None
+
+# --- ANALYSIS ---
+if start and url:
+    st.video(url)
+
+    with st.spinner("Fetching transcript..."):
+        transcript = get_transcript(url)
+
     if transcript:
-        # Generate English summary
-        summary_en = summarize_transcript(transcript)
-        
-        st.subheader("Summary (English)")
-        st.text_area("Summary:", summary_en, height=300)
+        with st.spinner("Generating summary..."):
 
-        # Financial Impact Graph
-        st.subheader("Financial Impact Analysis")
-        financial_data = extract_financial_data(transcript)
-        if financial_data:
-            df = pd.DataFrame(financial_data)  # Convert to DataFrame
-            chart = alt.Chart(df).mark_bar().encode(
-                x='label:N',   # Nominal (categorical) field
-                y='value:Q',   # Quantitative (numeric) field
-                tooltip=['label', 'value']
-            ).properties(title="Financial Impact")
-            st.altair_chart(chart, use_container_width=True)
-        else:
-            st.info("No financial data detected in video.")
+            # 🔥 DOMAIN ROUTING
+            if domain == "Finance":
+                result = finance_summary(transcript)
 
-        # PDF download
-        st.subheader("Download Options")
-        filename = st.text_input("Enter PDF filename:", "video_summary")
-        if st.button("Download Summary as PDF"):
-            pdf_file = save_summary_pdf(summary_en, filename)
-            st.success(f"✅ PDF saved as '{pdf_file}'")
-            
+            elif domain == "Tech":
+                result = tech_summary(transcript, mode)
+
+            elif domain == "Sports":
+                result = sports_summary(transcript, mode)
+
+            elif domain == "Gaming":
+                result = gaming_summary(transcript, mode)
+
+            elif domain == "Questions":
+                result = questions_summary(transcript)
+
+            else:
+                result = summary(transcript, mode)
+
+            st.session_state.summary_text = result
+            st.session_state.domain = domain
+
     else:
         st.error("❌ Transcript not available for this video.")
-      
+
+# --- DISPLAY ---
+if st.session_state.summary_text:
+    text = st.session_state.summary_text
+    active_domain = st.session_state.domain
+
+    st.divider()
+
+    # ── FINANCE ─────────────────────────────
+    if active_domain == "Finance":
+        col_left, col_right = st.columns([1, 1])
+
+        with col_left:
+            st.subheader("📋 Financial Summary")
+            bullets = parse_bullets(text)
+            for point in bullets:
+                st.markdown(f"- {point}")
+
+        with col_right:
+            st.subheader("📊 Financial Chart")
+            df = parse_financial_data(text)
+
+            if df is not None and not df.empty:
+                fig, ax = plt.subplots()
+                ax.bar(df["Metric"], df["Value"])
+                ax.set_xlabel("Metric")
+                ax.set_ylabel("Value")
+                ax.set_title("Financial Analysis")
+
+                st.pyplot(fig)
+
+                st.subheader("📁 Data Table")
+                st.dataframe(df, use_container_width=True)
+
+                # 🔥 INSIGHTS
+                st.subheader("📈 Insights")
+                max_row = df.loc[df["Value"].idxmax()]
+                min_row = df.loc[df["Value"].idxmin()]
+                avg = df["Value"].mean()
+
+                st.write(f"🔺 Highest: {max_row['Metric']} ({max_row['Value']:.2f})")
+                st.write(f"🔻 Lowest: {min_row['Metric']} ({min_row['Value']:.2f})")
+                st.write(f"📊 Average: {avg:.2f}")
+
+            else:
+                st.info("No numerical financial data found.")
+        
+
+    # ── QUESTIONS ───────────────────────────
+    elif active_domain == "Questions":
+        st.subheader("❓ Key Questions")
+        questions = parse_questions(text)
+
+        if questions:
+            for i, q in enumerate(questions, 1):
+                st.markdown(f"**Q{i}.** {q}")
+        else:
+            bullets = parse_bullets(text)
+            for point in bullets:
+                st.markdown(f"- {point}")
+
+    # ── OTHER DOMAINS ───────────────────────
+    else:
+        icons = {
+            "General Knowledge": "📚",
+            "Sports": "🏆",
+            "Gaming": "🎮",
+            "Tech": "💻",
+        }
+        icon = icons.get(active_domain, "📝")
+
+        st.subheader(f"{icon} {active_domain} Notes")
+        bullets = parse_bullets(text)
+        for point in bullets:
+            st.markdown(f"- {point}")
+
+    # ── DOWNLOAD ───────────────────────────
+    st.divider()
+    st.subheader("⬇️ Download")
+
+    filename = st.text_input("PDF filename:", "video_summary")
+    pdf_bytes = bytes(generate_pdf(text))
+
+    st.download_button(
+        label="📄 Download as PDF",
+        data=pdf_bytes,
+        file_name=f"{filename}.pdf",
+        mime="application/pdf",
+        use_container_width=True
+    )
