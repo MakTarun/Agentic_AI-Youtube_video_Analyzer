@@ -75,6 +75,7 @@ git clone https://github.com/MakTarun/Agentic_AI-Youtube_video_Analyzer.git
 cd Agentic_AI-Youtube_video_Analyzer
 
 pip install -r requirements.txt
+
 streamlit run main.py
 
 🚀 Usage
