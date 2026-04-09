@@ -1,35 +1,117 @@
-# Agentic_AI-Youtube_video_Analyzer
-A Python-based tool that leverages AI to analyze YouTube videos, providing concise summaries, key points, and insights directly from video transcripts.And then analyse those scripts using Grok llm
+# 🎬 Agentic AI YouTube Video Analyzer
 
-A Python-based tool that automatically extracts transcripts from YouTube videos and generates concise summaries with key points. Perfect for saving time and quickly understanding video content without watching the entire video.
+An **AI-powered YouTube Analyzer** that uses **Agentic AI + domain-specific intelligence** to extract transcripts, generate summaries, and provide structured insights — including **financial data visualization and question extraction**.
 
-Features
+> ⚡ Convert long YouTube videos into concise summaries and meaningful analysis.
 
-Transcript Extraction – Fetch full transcripts from any YouTube video automatically.
+📌 Overview
 
-Summarization – Generate a short summary (3–4 sentences) from the video transcript.
+With the rapid growth of video content, consuming long videos is time-consuming.
 
-Key Points – Extract key points in bullet format for quick insights.
+This project solves that by:
 
-AI Integration – Works with AI models/LLMs for natural language processing.
+- Extracting transcripts from videos
+- Applying domain-specific AI reasoning
+- Generating structured summaries and insights
+- Visualizing financial data
+- Allowing PDF downloads
 
-Easy to Use – Input a video URL and get both transcript and summary.
+✨ Features
+🎥 Core Features
+- Extract transcript from YouTube videos
+- AI-powered summarization
+- Multi-language support (English, Hindi, German)
 
-Technologies Used
+🧠 Agentic AI System
+- Domain-based intelligent routing
+- Custom prompts for different use cases
+- Context-aware output generation
 
-Python 3.x
 
-Groq AI
- (or other LLMs) for summarization
+📊 Financial Analysis:
+- Extracts metrics like:
+- Revenue, Profit, Loss, Growth, ROI, EBITDA
+- Converts units (K, M, B, Crore, Lakh)
+- Generates:
+📊 Bar charts (Matplotlib)
+📁 Data tables (Pandas)
+📈 Insights (Highest, Lowest, Average)
 
- INSTALLATION
- git clone https://github.com/yourusername/youtube-video-analyzer.git
-cd youtube-video-analyzer
+❓ Question Extraction
+- Identifies important questions from videos
+- Formats them into structured lists
+- Useful for interviews and revision
+
+📄 PDF Export
+- Download results as PDF
+- Unicode font support (NotoSans)
+- Clean formatting
+
+🧠 AI Architecture
+
+This project uses Agentic AI with domain-specific LLM orchestration powered by Groq.
+
+⚙️ Workflow
+- Input YouTube URL
+- Extract transcript
+- Convert transcript → structured text
+- Route to domain-specific AI agent
+- Generate output (summary / insights / charts)
+
+💻 Frontend
+- Streamlit
+⚙️ Backend
+- Python
+🤖 AI & APIs
+- Groq (LLM inference)
+- YouTube Transcript API
+📦 Libraries
+- pandas
+- matplotlib
+- fpdf
+- dotenv
+
+git clone https://github.com/MakTarun/Agentic_AI-Youtube_video_Analyzer.git
+cd Agentic_AI-Youtube_video_Analyzer
+
 pip install -r requirements.txt
-youtube-transcript-api for fetching transcripts
-dotenv for securely managing API keys
+streamlit run main.py
 
-RESULTS
-<img width="1334" height="697" alt="Screenshot 2026-03-17 183217" src="https://github.com/user-attachments/assets/df01608d-0104-424f-af4e-71bb0812e639" />
-<img width="1248" height="492" alt="Screenshot 2026-03-17 183239" src="https://github.com/user-attachments/assets/107341f9-23e7-4625-8b46-42526b29dafb" />
+🚀 Usage
 
+1.Enter a YouTube video URL
+
+2.Select domain (Finance, Tech, etc.)
+
+3.Choose output type:Summary or Descriptive
+
+4.Click Analyze
+
+5.View:Summary or Descriptive
+
+Insights,
+Charts (Finance),
+Questions,
+Download PDF
+
+
+
+## ✅ Advantages
+- 🧠 Implements Agentic AI for domain-specific reasoning and analysis  
+- 🎯 Multi-domain support (Finance, Tech, Sports, Gaming, etc.)  
+- 📊 Generates financial insights with data visualization (charts & tables)  
+- ❓ Extracts key questions for learning and interview preparation  
+- 📄 Supports PDF export for offline access and sharing  
+- 🌍 Multi-language transcript support (EN, HI, DE)  
+- 💡 Enhances productivity and knowledge extraction from video content  
+- 🖥️ User-friendly interface built with Streamlit
+
+## ⚠️ Limitations
+
+- 🎥 Requires videos with available transcripts (captions must be enabled)  
+- 🌐 Limited multilingual accuracy outside supported languages (EN, HI, DE)  
+- ⏱️ Long videos may face token limits or slower processing  
+- 🤖 LLM-generated outputs may occasionally miss context or produce approximations  
+- 📊 Financial insights depend on explicit numerical data in transcripts  
+- 🔌 Requires external API access (Groq) and internet connectivity  
+- 🚫 No real-time/live video analysis support yet  
