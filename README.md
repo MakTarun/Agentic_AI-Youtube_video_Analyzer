@@ -132,5 +132,7 @@ video link: https://www.youtube.com/watch?v=JyGFmesV_VE
 
 #financial video
 link:https://www.youtube.com/watch?v=8GXGLtk30CQ
+<img width="1831" height="833" alt="image" src="https://github.com/user-attachments/assets/0c1364fc-c7e9-4a03-9885-0406726a4d75" />
+
 
 
