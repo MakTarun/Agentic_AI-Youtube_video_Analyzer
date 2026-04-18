@@ -141,3 +141,5 @@ link:https://www.youtube.com/watch?v=8GXGLtk30CQ
 
 # output when choose questions:
 video:https://www.youtube.com/watch?v=tRZGeaHPoaw
+<img width="674" height="864" alt="image" src="https://github.com/user-attachments/assets/8586a85a-070a-453b-8626-6d1667e8cb95" />
+
