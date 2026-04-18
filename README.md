@@ -122,6 +122,7 @@ Download PDF
 <img width="1914" height="896" alt="image" src="https://github.com/user-attachments/assets/0d97f043-edb9-4901-9542-a846721c195d" />
 
 #Sports video analysis
+video link: https://www.youtube.com/watch?v=JyGFmesV_VE
 <img width="1199" height="824" alt="image" src="https://github.com/user-attachments/assets/b411a8a8-a9f0-4d11-b4de-a8e487358bc9" />
 
 
