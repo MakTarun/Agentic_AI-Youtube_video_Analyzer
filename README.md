@@ -138,3 +138,6 @@ link:https://www.youtube.com/watch?v=8GXGLtk30CQ
 <img width="1628" height="618" alt="image" src="https://github.com/user-attachments/assets/3147ee09-59a8-4298-b148-9c5cdb165b07" />
 <img width="717" height="500" alt="image" src="https://github.com/user-attachments/assets/d096c701-a45b-452c-a533-e6b4d3b974c8" />
 
+
+# output when choose questions:
+video:https://www.youtube.com/watch?v=tRZGeaHPoaw
