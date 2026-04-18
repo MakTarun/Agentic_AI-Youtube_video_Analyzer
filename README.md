@@ -130,4 +130,7 @@ video link: https://www.youtube.com/watch?v=JyGFmesV_VE
 # result in pdf
 <img width="1008" height="854" alt="image" src="https://github.com/user-attachments/assets/b11255b0-c80c-488f-b8c1-7a31cef76fa3" />
 
+#financial video
+link:https://www.youtube.com/watch?v=8GXGLtk30CQ
+
 
