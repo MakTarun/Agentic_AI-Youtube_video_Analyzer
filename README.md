@@ -124,5 +124,8 @@ Download PDF
 #Sports video analysis
 video link: https://www.youtube.com/watch?v=JyGFmesV_VE
 <img width="1199" height="824" alt="image" src="https://github.com/user-attachments/assets/b411a8a8-a9f0-4d11-b4de-a8e487358bc9" />
+#download options
 
+<img width="1766" height="424" alt="image" src="https://github.com/user-attachments/assets/7b302aec-0178-46c6-9579-76bec70ee3ee" />
+# result in pdf
 
