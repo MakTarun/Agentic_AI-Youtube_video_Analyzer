@@ -128,4 +128,6 @@ video link: https://www.youtube.com/watch?v=JyGFmesV_VE
 
 <img width="1766" height="424" alt="image" src="https://github.com/user-attachments/assets/7b302aec-0178-46c6-9579-76bec70ee3ee" />
 # result in pdf
+<img width="1008" height="854" alt="image" src="https://github.com/user-attachments/assets/b11255b0-c80c-488f-b8c1-7a31cef76fa3" />
+
 
