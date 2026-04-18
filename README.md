@@ -116,3 +116,7 @@ Download PDF
 - 📊 Financial insights depend on explicit numerical data in transcripts  
 - 🔌 Requires external API access (Groq) and internet connectivity  
 - 🚫 No real-time/live video analysis support yet  
+
+# Result
+
+#
