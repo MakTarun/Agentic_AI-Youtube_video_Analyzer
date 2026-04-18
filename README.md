@@ -126,15 +126,15 @@ video link: https://www.youtube.com/watch?v=JyGFmesV_VE
 <img width="1199" height="824" alt="image" src="https://github.com/user-attachments/assets/b411a8a8-a9f0-4d11-b4de-a8e487358bc9" />
 #download options
 
-<img width="1766" height="424" alt="image" src="https://github.com/user-attachments/assets/7b302aec-0178-46c6-9579-76bec70ee3ee" />
+<img width="1699" height="424" alt="image" src="https://github.com/user-attachments/assets/7b302aec-0178-46c6-9579-76bec70ee3ee" />
 # result in pdf
-<img width="1008" height="854" alt="image" src="https://github.com/user-attachments/assets/b11255b0-c80c-488f-b8c1-7a31cef76fa3" />
+<img width="900" height="854" alt="image" src="https://github.com/user-attachments/assets/b11255b0-c80c-488f-b8c1-7a31cef76fa3" />
 
 #financial video
 link:https://www.youtube.com/watch?v=8GXGLtk30CQ
 
-<img width="1831" height="833" alt="image" src="https://github.com/user-attachments/assets/0c1364fc-c7e9-4a03-9885-0406726a4d75" />
+<img width="1500" height="833" alt="image" src="https://github.com/user-attachments/assets/0c1364fc-c7e9-4a03-9885-0406726a4d75" />
 
-<img width="1848" height="618" alt="image" src="https://github.com/user-attachments/assets/3147ee09-59a8-4298-b148-9c5cdb165b07" />
-<img width="717" height="834" alt="image" src="https://github.com/user-attachments/assets/d096c701-a45b-452c-a533-e6b4d3b974c8" />
+<img width="1628" height="618" alt="image" src="https://github.com/user-attachments/assets/3147ee09-59a8-4298-b148-9c5cdb165b07" />
+<img width="717" height="500" alt="image" src="https://github.com/user-attachments/assets/d096c701-a45b-452c-a533-e6b4d3b974c8" />
 
